@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a3d284d6da8548246b99fc23a309374b
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 288944
+  packageName: Tanks
+  packageVersion: 1.0
+  assetPath: Assets/Tanks/Materials/Base_2.mat
+  uploadId: 674565

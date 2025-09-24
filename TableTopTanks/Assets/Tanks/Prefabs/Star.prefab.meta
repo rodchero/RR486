@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 1037406e2785d5e4080af564ebefc663
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 288944
+  packageName: Tanks
+  packageVersion: 1.0
+  assetPath: Assets/Tanks/Prefabs/Star.prefab
+  uploadId: 674565

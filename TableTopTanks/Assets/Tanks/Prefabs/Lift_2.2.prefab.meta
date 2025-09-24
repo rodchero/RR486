@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: ed9000cb57c439c468485c070add1f72
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 288944
+  packageName: Tanks
+  packageVersion: 1.0
+  assetPath: Assets/Tanks/Prefabs/Lift_2.2.prefab
+  uploadId: 674565

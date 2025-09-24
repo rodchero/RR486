@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 2c98a8545b0078846a56cfa3ad1c159b
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 288944
+  packageName: Tanks
+  packageVersion: 1.0
+  assetPath: Assets/Tanks/Prefabs/Coin.prefab
+  uploadId: 674565

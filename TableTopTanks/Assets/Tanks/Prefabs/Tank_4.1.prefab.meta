@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 85e733c4ff4f87b4c8a2e2f78f63c110
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 288944
+  packageName: Tanks
+  packageVersion: 1.0
+  assetPath: Assets/Tanks/Prefabs/Tank_4.1.prefab
+  uploadId: 674565

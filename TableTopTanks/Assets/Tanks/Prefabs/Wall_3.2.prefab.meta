@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 7e84956a08be9cb4884e3f64722e442e
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 288944
+  packageName: Tanks
+  packageVersion: 1.0
+  assetPath: Assets/Tanks/Prefabs/Wall_3.2.prefab
+  uploadId: 674565

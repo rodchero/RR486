@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 7fe3dfc6b215fc649ae8fe57457680a4
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 288944
+  packageName: Tanks
+  packageVersion: 1.0
+  assetPath: Assets/Tanks/Prefabs/Gun_1.2.prefab
+  uploadId: 674565

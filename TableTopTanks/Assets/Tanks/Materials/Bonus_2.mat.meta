@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: b06408f963629f74eaa0c254e144fb91
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 288944
+  packageName: Tanks
+  packageVersion: 1.0
+  assetPath: Assets/Tanks/Materials/Bonus_2.mat
+  uploadId: 674565
