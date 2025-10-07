@@ -124,6 +124,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 769046441338634984, guid: 665b05bf9fca15f439fd7f67f782fd68, type: 3}
   m_PrefabInstance: {fileID: 1482533602}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &90897041 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9146919410632886607, guid: 665b05bf9fca15f439fd7f67f782fd68, type: 3}
+  m_PrefabInstance: {fileID: 1482533602}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &265508254
 GameObject:
   m_ObjectHideFlags: 0
@@ -134,7 +139,7 @@ GameObject:
   m_Component:
   - component: {fileID: 265508255}
   - component: {fileID: 265508256}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -201,7 +206,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 3.65, y: -3.4, z: 4.25}
+  m_Size: {x: 3.65, y: 3.4, z: 4.25}
   m_Center: {x: 0, y: 1.8, z: 0.16}
 --- !u!114 &288442527
 MonoBehaviour:
@@ -215,14 +220,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 336ee8011d3de754dba09404793d90ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TankController
-  cam: {fileID: 963194227}
-  tankTurret: {fileID: 90897038}
+  mainCamera: {fileID: 963194227}
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  tankMoveSpeed: 10
-  tankRotationSpeed: 120
-  tankTurretRotationSpeed: 60
+  tankTurret: {fileID: 90897038}
+  shellSpawner: {fileID: 1389230043}
+  mineSpawner: {fileID: 1263125308}
+  shellObject: {fileID: 6463975326587695869, guid: 7f4c202ca4c5c8f4693850d64de99b38, type: 3}
+  maxShells: 5
+  tankMoveSpeed: 16
+  tankRotationSpeed: 180
+  tankTurretRotationSpeed: 120
 --- !u!54 &288442528
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -232,8 +241,8 @@ Rigidbody:
   m_GameObject: {fileID: 288442525}
   serializedVersion: 5
   m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_LinearDamping: 1
+  m_AngularDamping: 1
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -248,7 +257,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 36
   m_CollisionDetection: 2
 --- !u!114 &288442529
 MonoBehaviour:
@@ -262,7 +271,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
-  m_Actions: {fileID: -944628639613478452, guid: 289c1b55c9541489481df5cc06664110, type: 3}
+  m_Actions: {fileID: -944628639613478452, guid: b1a0b930dff3f1942b212946c3cd1c94, type: 3}
   m_NotificationBehavior: 0
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
@@ -276,10 +285,15 @@ MonoBehaviour:
       m_Calls: []
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: Keyboard&Mouse
-  m_DefaultActionMap: 
+  m_DefaultControlScheme: Key+Mouse
+  m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!4 &362892965 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8005797865294514204, guid: 665b05bf9fca15f439fd7f67f782fd68, type: 3}
+  m_PrefabInstance: {fileID: 1482533602}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -387,7 +401,7 @@ GameObject:
   m_Component:
   - component: {fileID: 733710685}
   - component: {fileID: 733710686}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -551,7 +565,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 819288700}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -662,13 +676,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0.69465834, y: 0, z: 0, w: 0.71933985}
   m_LocalPosition: {x: 0, y: 40, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 88, y: 0, z: 0}
 --- !u!1 &1193541422
 GameObject:
   m_ObjectHideFlags: 0
@@ -679,7 +693,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1193541423}
   - component: {fileID: 1193541424}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -722,6 +736,68 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 200, y: 40, z: 1}
   m_Center: {x: 0, y: 0, z: 100}
+--- !u!1 &1263125308
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1263125309}
+  m_Layer: 3
+  m_Name: MineSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1263125309
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1263125308}
+  serializedVersion: 2
+  m_LocalRotation: {x: -6.123235e-17, y: 0.00000019470718, z: -6.123233e-17, w: 1}
+  m_LocalPosition: {x: 0.00001, y: 0.00315, z: -0.01658}
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 362892965}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1389230043
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1389230044}
+  m_Layer: 3
+  m_Name: ShellSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1389230044
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1389230043}
+  serializedVersion: 2
+  m_LocalRotation: {x: -6.123235e-17, y: 0.00000019470718, z: -6.123233e-17, w: 1}
+  m_LocalPosition: {x: -0.0035, y: 0.0192, z: 0.0328}
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 90897041}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1482533602
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -730,6 +806,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 769046441338634984, guid: 665b05bf9fca15f439fd7f67f782fd68, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297064587087569317, guid: 665b05bf9fca15f439fd7f67f782fd68, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7371752567603189021, guid: 665b05bf9fca15f439fd7f67f782fd68, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.0878534
@@ -774,9 +858,19 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tank_1.1
       objectReference: {fileID: 0}
+    - target: {fileID: 7856082373903880103, guid: 665b05bf9fca15f439fd7f67f782fd68, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 9146919410632886607, guid: 665b05bf9fca15f439fd7f67f782fd68, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1389230044}
+    - targetCorrespondingSourceObject: {fileID: 8005797865294514204, guid: 665b05bf9fca15f439fd7f67f782fd68, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1263125309}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7856082373903880103, guid: 665b05bf9fca15f439fd7f67f782fd68, type: 3}
       insertIndex: -1
@@ -801,7 +895,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1572823137}
   - component: {fileID: 1572823138}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
