@@ -28,6 +28,7 @@ public class TankController : MonoBehaviour
     private Vector2 moveVal;
     private Rigidbody rb;
     private int curShells = 0;
+    GameObject[] shells;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -88,10 +89,9 @@ public class TankController : MonoBehaviour
 
     void Update()
     {
-        // keep track of current shells (destroyed shells should decrement this value)
-        GameObject[] shells = GameObject.FindGameObjectsWithTag("PlayerShell");
+        // keep track of current shells
+        shells = GameObject.FindGameObjectsWithTag("PlayerShell");
         curShells = shells.Length;
-
     }
 
 
@@ -102,10 +102,12 @@ public class TankController : MonoBehaviour
 
     void OnShoot(InputValue value)
     {
-        if ( curShells < maxShells )
+        if (curShells < maxShells)
         {
             // spawn shell at shell spawner position and rotation
             GameObject shell = Instantiate(shellObject, shellSpawner.transform.position, shellSpawner.transform.rotation);
+            // set the tag to "PlayerShell" (for counting purposes)
+            shell.tag = "PlayerShell";
             // add forward force to shell
             Rigidbody shellRb = shell.GetComponent<Rigidbody>();
             shellRb.AddForce(shellSpawner.transform.forward * 10.0f, ForceMode.Impulse);

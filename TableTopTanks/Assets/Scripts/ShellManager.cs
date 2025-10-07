@@ -39,17 +39,15 @@ public class ShellManager : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        // Handle case of shell colliding with a tank (enemy or friendly)
-        //TODO
-
-        // Handle case of shell colliding with a wall
+        // Handle case of shell bouncing off a wall (bouncywall layer)
+        // else destroy shell, damage logic handled by tank scripts
         if (((1 << collision.gameObject.layer) & bounceLayer.value) != 0)
         {
             numBounces++;
         }
         else
         {
-            Destroy(shell, 0.1f);
+            Destroy(shell);
         }
     }
 
