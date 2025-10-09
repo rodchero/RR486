@@ -73,7 +73,7 @@ public class EnemyMovementFSM : MonoBehaviour
                 if (playerTank != null && Vector3.Distance(transform.position, playerTank.transform.position) < activationDistance)
                 {
                     // choose randomly between chase and flank to add some variety
-                    if (UnityEngine.Random.Range(0, 1) == 1)
+                    if (UnityEngine.Random.value >= 0.5f)
                     {
                         currentState = State.Chase;
                     }
