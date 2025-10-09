@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+// each level has a controller object that manages win/lose conditions and level transitions
+// may also manage multiplayer aspects in the future (this will track the gamestate later)
 public class LevelManager : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created

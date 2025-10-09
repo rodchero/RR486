@@ -11,12 +11,23 @@ public class EnemyMovementFSM : MonoBehaviour
     [SerializeField] private float rotateSpeed = 60f;
     [SerializeField] private float moveSpeed = 10f;
 
+    [Header("Flank Settings")]
+    [SerializeField] private float flankDistance = 30f;           // lateral distance from player to aim for
+    [SerializeField] private float flankBehindFactor = 0.5f;      // how far behind the player the flank point should be (fraction of flankDistance)
+    [SerializeField] private float flankTimeout = 5f;             // abort flank after this many seconds and resume chase
+    [SerializeField] private float navSampleRadius = 4f;          // radius to sample NavMesh around the computed flank point
+
     // internal variables
     private Rigidbody rb;
     private NavMeshAgent agent;
     // no need for destroyed state; turret behaviour script handles enemy destruction
     private enum State { Idle, Flank, Chase }
     private State currentState;
+
+    // flank runtime state
+    private Vector3 flankTarget;
+    private float flankStartTime;
+    private bool flankInitialized;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -28,6 +39,7 @@ public class EnemyMovementFSM : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         agent.speed = moveSpeed;
         agent.angularSpeed = rotateSpeed;
+        agent.stoppingDistance = 0.0f;
         agent.acceleration = moveSpeed * 4f;
 
         // we drive the rigidbody; agent provides nextPosition/velocity
@@ -40,6 +52,9 @@ public class EnemyMovementFSM : MonoBehaviour
 
         // keep agent stopped until chase begins
         agent.isStopped = true;
+
+        // flank setup
+        flankInitialized = false;
     }
 
     // Update is called once per frame
@@ -48,6 +63,7 @@ public class EnemyMovementFSM : MonoBehaviour
         switch (currentState)
         {
             case State.Idle:
+                Debug.Log("Movement: Idle");
                 // stop agent path in idle to avoid sudden changes
                 if (agent.hasPath)
                     agent.ResetPath();
@@ -56,13 +72,26 @@ public class EnemyMovementFSM : MonoBehaviour
 
                 if (playerTank != null && Vector3.Distance(transform.position, playerTank.transform.position) < activationDistance)
                 {
-                    currentState = State.Chase;
+                    // choose randomly between chase and flank to add some variety
+                    if (UnityEngine.Random.Range(0, 1) == 1)
+                    {
+                        currentState = State.Chase;
+                    }
+                    else
+                    {
+                        currentState = State.Flank;
+                    }
                 }
+
                 break;
             case State.Chase:
+                // reset any pending flank state when entering chase
+                flankInitialized = false;
+                Debug.Log("Movement: Chasing");
                 Chase();
                 break;
             case State.Flank:
+                Debug.Log("Movement: Flanking");
                 Flank();
                 break;
         }
@@ -73,13 +102,20 @@ public class EnemyMovementFSM : MonoBehaviour
     {
         //sync rigidbody position with agent
         agent.nextPosition = rb.position;
-        if (Quaternion.Angle(rb.rotation, agent.transform.rotation) < 1.0f)
+
+        // move if facing desired rotation, rotation handled by navmesh agent
+        if ((Quaternion.Angle(rb.rotation, agent.transform.rotation) < 1.0f) && currentState != State.Idle)
         {
 
-            Vector3 moveDir = transform.forward - Vector3.Cross(transform.forward, agent.velocity);
+            Vector3 moveDir = transform.forward; // - Vector3.Cross(transform.forward, agent.velocity);
             rb.linearVelocity = moveDir.normalized * moveSpeed;
         }
-        
+        else
+        {
+            // slow down while turning
+            rb.linearVelocity *= 0.5f;
+        }
+
     }
 
     private void Chase()
@@ -110,6 +146,62 @@ public class EnemyMovementFSM : MonoBehaviour
 
     private void Flank()
     {
-        // Implement flank behaviour here later
+        if (playerTank == null || agent == null) return;
+
+        // abort flank if player moved out of activation range
+        if (Vector3.Distance(transform.position, playerTank.transform.position) >= activationDistance)
+        {
+            flankInitialized = false;
+            currentState = State.Idle;
+            return;
+        }
+
+        // initialize flank target only once per flank entry
+        if (!flankInitialized)
+        {
+            // choose flank side randomly
+            int side = (Random.value < 0.5f) ? -1 : 1;
+
+            Vector3 playerPos = playerTank.transform.position;
+            Vector3 playerForward = playerTank.transform.forward;
+            Vector3 playerRight = playerTank.transform.right;
+
+            // compute a point to the side and slightly behind the player
+            Vector3 desired = playerPos
+                              + playerRight * (side * flankDistance)
+                              + playerForward * (-flankDistance * flankBehindFactor);
+
+            // try to find a nearby valid point on the NavMesh
+            if (NavMesh.SamplePosition(desired, out NavMeshHit hit, navSampleRadius, NavMesh.AllAreas))
+            {
+                flankTarget = hit.position;
+            }
+            else
+            {
+                // fallback: clamp to a point offset from current position towards desired
+                Vector3 dir = (desired - transform.position).normalized;
+                flankTarget = transform.position + dir * Mathf.Min(flankDistance, 20f);
+            }
+
+            agent.isStopped = false;
+            agent.SetDestination(flankTarget);
+            flankStartTime = Time.time;
+            flankInitialized = true;
+        }
+
+        // if path is pending, just wait
+        if (agent.pathPending)
+            return;
+
+        // if reached flank target or timeout, resume chase
+        bool reached = (agent.hasPath == false && agent.remainingDistance <= agent.stoppingDistance + 1.0f)
+                       || (agent.hasPath && agent.remainingDistance <= agent.stoppingDistance + 1.0f);
+
+        if (reached || (Time.time - flankStartTime) > flankTimeout || agent.pathStatus != NavMeshPathStatus.PathComplete)
+        {
+            flankInitialized = false;
+            currentState = State.Chase;
+            return;
+        }
     }
 }

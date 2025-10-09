@@ -62,15 +62,15 @@ public class EnemyTurretFSM : MonoBehaviour
             {
             case State.Idle:
                 Idle();
-                //Debug.Log("Idle");
+                //Debug.Log("Turret: Idle");
                 break;
             case State.Active:
                 Active();
-                //Debug.Log("Active");
+                //Debug.Log("Turret: Active");
                 break;
             case State.Destroyed:
                 Destroyed();
-                //.Log("Destroyed");
+                //Debug.Log("Turret: Destroyed");
                 break;
         }
     }

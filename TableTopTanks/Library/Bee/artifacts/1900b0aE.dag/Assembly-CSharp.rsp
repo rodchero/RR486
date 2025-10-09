@@ -437,6 +437,7 @@
 -analyzer:"Library/PackageCache/com.unity.dt.app-ui@166eda91cea7/Runtime/SourceGenerators/netstandard2.0/EnumToLowerCase.dll"
 "Assets/Scripts/EnemyMovementFSM.cs"
 "Assets/Scripts/EnemyTurretFSM.cs"
+"Assets/Scripts/EnemyTurretFSMwithLeading.cs"
 "Assets/Scripts/LevelManager.cs"
 "Assets/Scripts/ShellManager.cs"
 "Assets/Scripts/TankController.cs"

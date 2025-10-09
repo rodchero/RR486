@@ -1,6 +1,8 @@
 using UnityEditor;
 using UnityEngine;
 
+// this class manages the lifetime and behaviour of a shell object. The Physics engine does the heavy lifting of movement and collision detection,
+// but this script will destroy the shell after a certain number of bounces or a certain lifetime, or upon collision with a non-bouncy surface.
 public class ShellManager : MonoBehaviour
 {
     // Unity Parameters (need to be assigned in inspector)

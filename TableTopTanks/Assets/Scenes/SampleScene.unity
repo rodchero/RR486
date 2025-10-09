@@ -141,7 +141,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 117348510}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 881095f5dccfcb64d92a49631c19f046, type: 3}
   m_Name: 
@@ -220,6 +220,10 @@ MonoBehaviour:
   activationDistance: 50
   rotateSpeed: 60
   moveSpeed: 8
+  flankDistance: 30
+  flankBehindFactor: 0.5
+  flankTimeout: 10
+  navSampleRadius: 4
 --- !u!195 &117348516
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -584,7 +588,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7430908813877519060, guid: 6e1d6d9c5d58b114aa3effbac34751f9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -16.81
+      value: -19.6
       objectReference: {fileID: 0}
     - target: {fileID: 7430908813877519060, guid: 6e1d6d9c5d58b114aa3effbac34751f9, type: 3}
       propertyPath: m_LocalPosition.y
@@ -729,7 +733,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6903988891005553764, guid: f21cf6d155592f24c8593f28e10de708, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.5598764
+      value: 33.8
       objectReference: {fileID: 0}
     - target: {fileID: 6903988891005553764, guid: f21cf6d155592f24c8593f28e10de708, type: 3}
       propertyPath: m_LocalPosition.y
@@ -737,7 +741,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6903988891005553764, guid: f21cf6d155592f24c8593f28e10de708, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 9.346683
+      value: 61.3
       objectReference: {fileID: 0}
     - target: {fileID: 6903988891005553764, guid: f21cf6d155592f24c8593f28e10de708, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1616,7 +1620,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.33333334
+  m_VoxelSize: 0.6666667
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 0505232fb8805064783a9fad4ffc889c, type: 2}
   m_BuildHeightMesh: 0

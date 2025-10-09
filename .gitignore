@@ -1,4 +1,5 @@
-# This .gitignore file should be placed at the root of your Unity project directory
+# This .gitignore file should be placed at the root of your Unity project directory 
+# [modified; should be placed 1 level higher in "TableTopTanks"]
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
