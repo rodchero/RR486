@@ -134,28 +134,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4890636078847162194, guid: bc58225fab5cfbf4f861d6c10ff90800, type: 3}
   m_PrefabInstance: {fileID: 495464333}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &117348511
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 117348510}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 881095f5dccfcb64d92a49631c19f046, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyTurretFSM
-  turret: {fileID: 1228027026}
-  playerTank: {fileID: 288442525}
-  projectilePrefab: {fileID: 6463975326587695869, guid: 7f4c202ca4c5c8f4693850d64de99b38, type: 3}
-  projectileSpawner: {fileID: 978558445}
-  explosionVFX: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1, type: 3}
-  projectileSpeed: 5
-  activationDistance: 50
-  rotateSpeed: 90
-  maxShells: 3
-  reloadTime: 2
 --- !u!65 &117348512
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -220,7 +198,7 @@ MonoBehaviour:
   activationDistance: 50
   rotateSpeed: 60
   moveSpeed: 8
-  flankDistance: 30
+  flankDistance: 20
   flankBehindFactor: 0.5
   flankTimeout: 10
   navSampleRadius: 4
@@ -246,6 +224,32 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &117348518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117348510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7b7eb86417bc0544a8a8e7f518d4893, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyTurretFSMl
+  turret: {fileID: 1228027026}
+  playerTank: {fileID: 288442525}
+  projectilePrefab: {fileID: 6463975326587695869, guid: 7f4c202ca4c5c8f4693850d64de99b38, type: 3}
+  projectileSpawner: {fileID: 978558445}
+  explosionVFX: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1, type: 3}
+  projectileSpeed: 5
+  activationDistance: 50
+  rotateSpeed: 60
+  maxShells: 5
+  reloadTime: 2
+  maxLeadTime: 3
+  fallbackLeadTime: 0.5
+  aimAngleThreshold: 8
+  leadSphereRadius: 0.8
 --- !u!1 &201271874 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7805921909694888046, guid: 6e1d6d9c5d58b114aa3effbac34751f9, type: 3}
@@ -733,7 +737,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6903988891005553764, guid: f21cf6d155592f24c8593f28e10de708, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 33.8
+      value: 65
       objectReference: {fileID: 0}
     - target: {fileID: 6903988891005553764, guid: f21cf6d155592f24c8593f28e10de708, type: 3}
       propertyPath: m_LocalPosition.y
@@ -741,7 +745,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6903988891005553764, guid: f21cf6d155592f24c8593f28e10de708, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 61.3
+      value: 11.4
       objectReference: {fileID: 0}
     - target: {fileID: 6903988891005553764, guid: f21cf6d155592f24c8593f28e10de708, type: 3}
       propertyPath: m_LocalRotation.w
@@ -887,13 +891,13 @@ PrefabInstance:
       addedObject: {fileID: 117348512}
     - targetCorrespondingSourceObject: {fileID: 4890636078847162194, guid: bc58225fab5cfbf4f861d6c10ff90800, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 117348511}
+      addedObject: {fileID: 117348516}
     - targetCorrespondingSourceObject: {fileID: 4890636078847162194, guid: bc58225fab5cfbf4f861d6c10ff90800, type: 3}
       insertIndex: -1
       addedObject: {fileID: 117348515}
     - targetCorrespondingSourceObject: {fileID: 4890636078847162194, guid: bc58225fab5cfbf4f861d6c10ff90800, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 117348516}
+      addedObject: {fileID: 117348518}
   m_SourcePrefab: {fileID: 100100000, guid: bc58225fab5cfbf4f861d6c10ff90800, type: 3}
 --- !u!1 &552953649 stripped
 GameObject:
