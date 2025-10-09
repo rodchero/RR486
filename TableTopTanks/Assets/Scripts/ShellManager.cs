@@ -7,17 +7,18 @@ public class ShellManager : MonoBehaviour
     [Header("Unity Parameters")]
     [SerializeField] private int maxBounces = 1;
     [SerializeField] private float maxLifetime = 5.0f;
-    [SerializeField] public LayerMask bounceLayer;
 
     // internal variables
     private int numBounces = 0;
     private GameObject shell;
     private float shellLifetime = 0.0f;
+    private LayerMask bounceLayer;
 
     void Start()
     {
         // get a reference to the shell object
         shell = gameObject;
+        bounceLayer = LayerMask.GetMask("BouncyWall");
     }
 
     // Update is called once per frame

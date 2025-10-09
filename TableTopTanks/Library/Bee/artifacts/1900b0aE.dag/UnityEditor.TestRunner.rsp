@@ -129,6 +129,7 @@
 -define:ENABLE_INPUT_SYSTEM
 -define:TEXTCORE_FONT_ENGINE_1_5_OR_NEWER
 -define:TEXTCORE_TEXT_ENGINE_1_5_OR_NEWER
+-define:UNITY_POST_PROCESSING_STACK_V2
 -define:UNITY_TESTS_FRAMEWORK
 -define:CSHARP_7_OR_LATER
 -define:CSHARP_7_3_OR_NEWER
@@ -385,6 +386,10 @@
 -r:"D:/Unity/UnityEditors/6000.2.6f2/Editor/Data/UnityReferenceAssemblies/unity-4.8-api/System.Xml.dll"
 -r:"D:/Unity/UnityEditors/6000.2.6f2/Editor/Data/UnityReferenceAssemblies/unity-4.8-api/System.Xml.Linq.dll"
 -r:"Library/PackageCache/com.unity.ext.nunit@031a54704bff/net40/unity-custom/nunit.framework.dll"
+-r:"Library/PackageCache/com.unity.nuget.mono-cecil@d78732e851eb/Mono.Cecil.dll"
+-r:"Library/PackageCache/com.unity.nuget.mono-cecil@d78732e851eb/Mono.Cecil.Mdb.dll"
+-r:"Library/PackageCache/com.unity.nuget.mono-cecil@d78732e851eb/Mono.Cecil.Pdb.dll"
+-r:"Library/PackageCache/com.unity.nuget.mono-cecil@d78732e851eb/Mono.Cecil.Rocks.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEngine.TestRunner.ref.dll"
 -analyzer:"D:/Unity/UnityEditors/6000.2.6f2/Editor/Data/Tools/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll"
 -analyzer:"D:/Unity/UnityEditors/6000.2.6f2/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"

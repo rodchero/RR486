@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,12 +11,14 @@ public class TankController : MonoBehaviour
     [Header("Unity Parameters")]
 
     public Camera mainCamera;
-    public LayerMask groundLayer;
+    
     [SerializeField] private GameObject tankTurret;
     [SerializeField] private GameObject shellSpawner;
     [SerializeField] private GameObject mineSpawner;
     [SerializeField] private GameObject shellObject;
+    [SerializeField] private GameObject explosionVFX;
     [SerializeField] private int maxShells = 5;
+    [SerializeField] private float shellSpeed = 8.0f;
 
     // Movement Properties
     [Header("Movement Properties")]
@@ -27,14 +30,19 @@ public class TankController : MonoBehaviour
     // Internal variables
     private Vector2 moveVal;
     private Rigidbody rb;
-    private int curShells = 0;
-    GameObject[] shells;
+    List<GameObject> currentShells;
+    private LayerMask projectileLayer;
+    private LayerMask groundLayer;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-    }
+        currentShells = new List<GameObject>();
+        projectileLayer = LayerMask.GetMask("Projectile");
+        groundLayer = LayerMask.GetMask("Ground");
+}
 
     // FixedUpdate is called once per fixed time period 
     void FixedUpdate()
@@ -42,8 +50,9 @@ public class TankController : MonoBehaviour
         // move tank forward/backward
 
         Vector3 moveDirection = transform.forward * moveVal.y * tankMoveSpeed * Time.fixedDeltaTime;
-        rb.MovePosition(rb.position + moveDirection);
+        //rb.MovePosition(rb.position + moveDirection);
         //rb.AddForce(moveDirection.normalized * tankMoveSpeed, ForceMode.Acceleration);
+        rb.linearVelocity = moveDirection.normalized * tankMoveSpeed;
 
 
         // rotate tank
@@ -54,7 +63,7 @@ public class TankController : MonoBehaviour
 
         // rotate tank turret in direction of mouse
 
-        // using old method of input here because the new inputsystem onlu returns mouse deltas (not what I need)
+        // using old method of input here because the new inputsystem only returns mouse deltas (not what I need)
         Vector2 mouseScreenPos = Mouse.current.position.ReadValue();
         // raycast mouse position to ground plane (table surface)
         Ray ray = mainCamera.ScreenPointToRay(mouseScreenPos);
@@ -87,14 +96,7 @@ public class TankController : MonoBehaviour
         mainCamera.transform.position = transform.position + cameraOffset;
     }
 
-    void Update()
-    {
-        // keep track of current shells
-        shells = GameObject.FindGameObjectsWithTag("PlayerShell");
-        curShells = shells.Length;
-    }
-
-
+    // updated input system event functions
     void OnMove(InputValue value)
     {
         moveVal = value.Get<Vector2>();
@@ -102,22 +104,37 @@ public class TankController : MonoBehaviour
 
     void OnShoot(InputValue value)
     {
-        if (curShells < maxShells)
+        // clean up null entries in current shells list (from destroyed shells)
+        currentShells.RemoveAll(item => item == null);
+        if (currentShells.Count < maxShells)
         {
             // spawn shell at shell spawner position and rotation
             GameObject shell = Instantiate(shellObject, shellSpawner.transform.position, shellSpawner.transform.rotation);
-            // set the tag to "PlayerShell" (for counting purposes)
-            shell.tag = "PlayerShell";
             // add forward force to shell
             Rigidbody shellRb = shell.GetComponent<Rigidbody>();
-            shellRb.AddForce(shellSpawner.transform.forward * 10.0f, ForceMode.Impulse);
+            shellRb.AddForce(shellSpawner.transform.forward * shellSpeed, ForceMode.Impulse);
+            currentShells.Add(shell);
         }
-        
-
     }
 
     void OnPlaceMine(InputValue value)
     {
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        // if hit by a projectile, destroy player tank
+        if (((1 << collision.gameObject.layer) & projectileLayer.value) != 0)
+        {
+            if (explosionVFX != null)
+            {
+                GameObject vfxInstance = Instantiate(explosionVFX, transform.position, Quaternion.identity);
+                Destroy(vfxInstance, 2.0f);
+            }
+
+            // finally destroy this player GameObject
+            Destroy(gameObject);
+        }
     }
 
 }

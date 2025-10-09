@@ -69,7 +69,7 @@ Right mouse button to place a landmine
 ESC to access pause menu  
 
 ## 📂 Project Setup aligned to course topics
-Unity 6.2 (6000.2.3f1)  
+Unity 6.2 (6000.2.6f2)  
 C# scripts for PlayerController, EnemyTank_{type}, ShellProjectile, RocketProjectile, LandMine, etc  
 NavMesh for AI pathing  
 Physics materials and layers configured in Project Settings  
