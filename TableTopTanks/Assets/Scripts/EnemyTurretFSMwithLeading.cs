@@ -47,6 +47,7 @@ public class EnemyTurretFSMwithLeading : MonoBehaviour
         playerTank = GameObject.FindGameObjectWithTag("Player");
         currentShells = new List<GameObject>();
         projectileLayer = LayerMask.GetMask("Projectile");
+        playerTank = GameObject.FindGameObjectWithTag("Player");
         playerRb = playerTank != null ? playerTank.GetComponent<Rigidbody>() : null;
     }
 

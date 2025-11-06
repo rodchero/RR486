@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 // each level has a controller object that manages win/lose conditions and level transitions
 // may also manage multiplayer aspects in the future (this will track the gamestate later)
@@ -45,9 +46,11 @@ public class LevelManager : MonoBehaviour
             case levelState.Win:
                 Debug.Log("Level " + levelNumber + " Complete!");
                 // show victory screen and load next level after a delay
+                SceneManager.LoadScene("Level");
                 break;
             case levelState.Lose:
                 // show game over screen + menu
+                SceneManager.LoadScene("Level");
                 break;
         }
         

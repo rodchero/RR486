@@ -32,6 +32,7 @@ public class EnemyMovementFSM : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        playerTank = GameObject.FindGameObjectWithTag("Player");
         rb = GetComponent<Rigidbody>();
         currentState = State.Idle;
 
@@ -63,7 +64,7 @@ public class EnemyMovementFSM : MonoBehaviour
         switch (currentState)
         {
             case State.Idle:
-                Debug.Log("Movement: Idle");
+                //Debug.Log("Movement: Idle");
                 // stop agent path in idle to avoid sudden changes
                 if (agent.hasPath)
                     agent.ResetPath();
@@ -87,11 +88,11 @@ public class EnemyMovementFSM : MonoBehaviour
             case State.Chase:
                 // reset any pending flank state when entering chase
                 flankInitialized = false;
-                Debug.Log("Movement: Chasing");
+                //Debug.Log("Movement: Chasing");
                 Chase();
                 break;
             case State.Flank:
-                Debug.Log("Movement: Flanking");
+                //Debug.Log("Movement: Flanking");
                 Flank();
                 break;
         }

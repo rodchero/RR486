@@ -42,6 +42,7 @@ public class TankController : MonoBehaviour
         currentShells = new List<GameObject>();
         projectileLayer = LayerMask.GetMask("Projectile");
         groundLayer = LayerMask.GetMask("Ground");
+        mainCamera = Camera.main;
 }
 
     // FixedUpdate is called once per fixed time period 
