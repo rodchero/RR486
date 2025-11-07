@@ -1,16 +1,11 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using UnityEditor.EditorTools;
 
-// each level has a controller object that manages win/lose conditions and level transitions
-// may also manage multiplayer aspects in the future (this will track the gamestate later)
+
 public class GameManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    [Header("Level Settings")]
-    [SerializeField] private int levelNumber = 0;
-
-
     // internal variables for level state (when in a level)
     private levelState currentLevelState;
     private List<GameObject> enemies;
@@ -18,15 +13,45 @@ public class GameManager : MonoBehaviour
     private enum levelState { Ongoing, Win, Lose };
 
     // variables for level management
-    private enum gameState{ MainMenu, InLevel, BetweenLevels };
+    private enum gameState { MainMenu, InLevel, BetweenLevels };
     private gameState currentGameState;
     [SerializeField] private Scene[] levels;
     private int numLevels;
-    private int selectedLevel = -1; // -1 means no level selected
+    private int currentLevel = -1; // -1 means no level selected
+
+    private enum levelResult { None, Win, Lose };
+    private levelResult previousLevelResult = levelResult.None;
+
+    // other variables
+    [Header("Between Levels Settings")]
+    [SerializeField] private float betweenLevelsTimer = 0.0f;
+    [SerializeField] private GameObject winPopupCanvas;
+    [SerializeField] private GameObject losePopupCanvas;
+    
+    
+    // Singleton instance - this script should only have one instance and always persists between scenes (to manage game state)
+    public static GameManager Instance { get; private set; }
+
+    private void Awake()
+    {
+        // If there is an instance, and it's not this, delete this.
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        // Set the instance and make it persistent
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
 
     void Start()
     {
         currentGameState = gameState.MainMenu;
+        numLevels = levels.Length;
+
     }
 
     // Update is called once per frame
@@ -38,18 +63,51 @@ public class GameManager : MonoBehaviour
         switch (currentGameState)
         {
             case gameState.MainMenu:
-                if (selectedLevel != -1)
+                if (currentLevel != -1)
                 {
-                    levelNumber = selectedLevel;
+                    // load and setup level
+                    SceneManager.LoadScene(levels[currentLevel].name);
                     SetupLevel();
                     currentGameState = gameState.InLevel;
+                    previousLevelResult = levelResult.None;
                 }
                 break;
             case gameState.InLevel:
                 PlayLevel();
                 break;
             case gameState.BetweenLevels:
-                // load next level or return to main menu
+                // wait 5 seconds (with a win/loss screen popup)
+                betweenLevelsTimer += Time.deltaTime;
+                if (betweenLevelsTimer > 5.0f)
+                {
+                    if (previousLevelResult == levelResult.Win)
+                    {
+                        // won the level, go to next level (or main menu if last level)
+                        if (currentLevel >= numLevels)
+                        {
+                            currentGameState = gameState.MainMenu;
+                            currentLevel = -1;
+                        }
+                        else
+                        {
+                            currentLevel++;
+                        }
+                        winPopupCanvas.SetActive(false);
+                        currentGameState = gameState.InLevel;
+                        SceneManager.LoadScene(levels[currentLevel].name);
+                        SetupLevel();
+                    }
+                    else
+                    {
+                        // lost the level, go to main menu
+                        currentLevel = -1;
+                        losePopupCanvas.SetActive(false);
+                        currentGameState = gameState.MainMenu;
+                        SceneManager.LoadScene("Menu");
+                    }
+                    
+                    betweenLevelsTimer = 0.0f;
+                }
                 break;
         }
     }
@@ -59,7 +117,7 @@ public class GameManager : MonoBehaviour
         switch (currentLevelState)
         {
             case levelState.Ongoing:
-                // check win and lose conditions
+                // check win and lose conditions (enemy/player counts)
                 enemies.RemoveAll(item => item == null);
                 players.RemoveAll(item => item == null);
                 if (enemies.Count == 0)
@@ -72,13 +130,16 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case levelState.Win:
-                Debug.Log("Level " + levelNumber + " Complete!");
-                // show victory screen and load next level after a delay
-                SceneManager.LoadScene("Level");
+                Debug.Log("Level " + currentLevel + " Complete!");
+                previousLevelResult = levelResult.Win;
+                currentGameState = gameState.BetweenLevels;
+                winPopupCanvas.SetActive(true);
                 break;
             case levelState.Lose:
-                // show game over screen + menu
-                SceneManager.LoadScene("Level");
+                Debug.Log("Level " + currentLevel + " Failed!");
+                previousLevelResult = levelResult.Lose;
+                currentGameState = gameState.BetweenLevels;
+                losePopupCanvas.SetActive(true);
                 break;
         }
     }
@@ -89,4 +150,10 @@ public class GameManager : MonoBehaviour
         enemies = new List<GameObject>(GameObject.FindGameObjectsWithTag("Enemy"));
         players = new List<GameObject>(GameObject.FindGameObjectsWithTag("Player"));
     }
+
+    public void OnSinglePlayerLevelSelected()
+    {
+        currentLevel = 0; // first level
+    }
+
 }
