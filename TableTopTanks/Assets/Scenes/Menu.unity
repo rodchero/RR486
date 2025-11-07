@@ -255,52 +255,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 191585657}
   m_CullTransparentMesh: 1
---- !u!1 &645802977
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 645802979}
-  - component: {fileID: 645802978}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: GameController
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &645802978
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 645802977}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c86c6923f4b240e4894192e730c5e48b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LevelManager
-  levelNumber: 0
-  levels: []
---- !u!4 &645802979
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 645802977}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.53943, y: 0, z: 2.31685}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &648744779
 GameObject:
   m_ObjectHideFlags: 0
@@ -417,6 +371,7 @@ GameObject:
   - component: {fileID: 694738054}
   - component: {fileID: 694738053}
   - component: {fileID: 694738052}
+  - component: {fileID: 694738055}
   m_Layer: 5
   m_Name: 1P
   m_TagString: Untagged
@@ -487,7 +442,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 694738053}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 694738055}
+        m_TargetAssemblyTypeName: UIEventProxy, Assembly-CSharp
+        m_MethodName: StartSinglePlayer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &694738053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -526,6 +493,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 694738050}
   m_CullTransparentMesh: 1
+--- !u!114 &694738055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 694738050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee44a27ebdd5d57ff810e59a2cf3aed1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIEventProxy
 --- !u!1 &1015165300
 GameObject:
   m_ObjectHideFlags: 0
@@ -697,6 +676,56 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1340501883
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1340501885}
+  - component: {fileID: 1340501884}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1340501884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1340501883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c86c6923f4b240e4894192e730c5e48b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  levelScenes:
+  - {fileID: 102900000, guid: 9fc0d4010bbf28b4594072e72b8655ab, type: 3}
+  - {fileID: 102900000, guid: a55da7b4b3f1e2070b2ff28e00b7eb2e, type: 3}
+  timeBetweenLevels: 5
+  winPopupCanvas: {fileID: 4997480858885771019, guid: 108b64faf07989f8d8ae1c61765c9db6, type: 3}
+  losePopupCanvas: {fileID: 2390417632038381146, guid: 319812e7fa8f7711c9c34d3b8622695c, type: 3}
+--- !u!4 &1340501885
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1340501883}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 527.351, y: 308.90536, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1197,8 +1226,8 @@ CanvasRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1340501885}
   - {fileID: 1558762039}
   - {fileID: 1015165302}
-  - {fileID: 645802979}
   - {fileID: 648744783}
   - {fileID: 1282287108}
