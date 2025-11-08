@@ -1,23 +1,24 @@
 # 🎮 Tabletop Tanks
 Project for CISC486 by Roman Rodchenkov
 
-# ASSIGNMENT-RELATED ITEMS
-- readme was updated since A1 to reflect new FSMs, minor changes in scope, etc
-- youtube link for demo video: https://youtu.be/hx0DoiJUpA4
+# ASSIGNMENT 3 UPDATES 
+- run the game (from editor) from the main menu scene (/Assets/Scenes/Menu.unity) to make sure level loading logic works
+- pathfinding is implemented via Unity's NavMesh System 
+- link to video showing pathfinding/decision-making : https://youtu.be/fGKllEsPIVo
 
 ## 📌 Overview
 Tabletop Tanks is a 3-d survival/action game in which the player controls a miniature tank, and must clear progressively harder levels that include enemies and obstacles. Inspired by the Wii Play "Tanks!" game.
 
 ## 🕹️ Core Gameplay
 Player controls the "player tank" from a top-down view, and:  
-- shoots shells, drives around, and places landmines to destroy enemy tanks
+- shoots shells, drives around, and places landmines to destroy enemy tanks [no landmines yet]
 - avoids environmental hazards and enemy shells, rockets, and mines to survive
 - Win by being the last (allied*) tank alive
 - Lose if your tank is destroyed by the enemy
 
 ## 👥 Player Setup
 - Single player as the player tank 
-- Optional co-op mode where a second player controls an allied tank and helps clear levels 
+- Optional co-op mode where a second player controls an allied tank and helps clear levels (unimplemented)  
 
 ## 🤖 AI Design [2 types implemented so far]  
 Several (4 to 8) types of enemy tanks with different behaviour, projectiles, movespeed, health, etc  
@@ -48,13 +49,16 @@ The current setup uses 2 FSM that separately handle shooting and moving (some en
 ### EnemyTurretFSM
 - Like EnemyTurretFSMwithLeading, but only aims/shoots directly at player. Same states & transitions.  
 
-## 🎬 Scripted Events [not yet implemented]
+### GameState and LevelState FSMs  
+- the overall game state (MainMenu, InLevel, BetweenLevels) and level state (Ongoing, Win, Lose) are managed using an FSM (technically)  
+
+## 🎬 Scripted Events [some not yet implemented]
 - Lose event (player tank destroyed) - bring up score menu
 - Win event (plays victory music and loads next level. If last level, displays win screen/menu)
 - Long shot event (destroying an enemy tank from a large distance will play a sound effect and score extra points)
 - Ricochet kill event (destroying an enemy tank with a ricochet shell will play a sound effect and score extra points)
 
-## 🌍 Environment
+## 🌍 Environment [destructibility not yet implemented]
 - Various levels with different obstacles, enemy arrangements and layout
 - Some walls/objects will be "destructible" and may allow for new paths or angles to shoot shells if blown up (with a landmine)
 - "Tabletop" environment : on a wood floor/surface, with various blocks and everyday items as environmental obstacles (ie, mug, pen, computer, various toys and wood blocks, etc)
