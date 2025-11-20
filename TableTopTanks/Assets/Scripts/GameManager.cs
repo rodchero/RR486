@@ -2,18 +2,24 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using System.Runtime.InteropServices;
+using PurrNet;
+using System;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetworkIdentity
 {
     // internal variables for level state (when in a level)
     private levelState currentLevelState;
     private List<GameObject> enemies;
     private List<GameObject> players;
     private enum levelState { Ongoing, Win, Lose };
+
+    private bool isSinglePlayer = true;
+    // used to (not) spawn in 2nd player tank in singleplayer mode
 
     // variables for level management
     private enum gameState { MainMenu, InLevel, BetweenLevels };
@@ -39,6 +45,14 @@ public class GameManager : MonoBehaviour
 
     private bool isLoadingLevel = false;
 
+    [Header("Multiplayer")]
+    // simple connected players store (id,name)
+    private List<(string id, string name)> connectedPlayers = new List<(string id, string name)>();
+
+    // Scene object references
+    public GameObject multiplayerPanel;
+    public GameObject mainMenuPanel;
+
     // Singleton instance - this script should only have one instance and always persists between scenes (to manage game state)
     public static GameManager Instance { get; private set; }
 
@@ -49,6 +63,13 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
             return;
+        }
+
+        // fix for inital load into Menu scene
+        if (SceneManager.GetActiveScene().name == "Menu")
+        {
+            RebindMenuPanels();
+            multiplayerPanel.SetActive(false);
         }
 
         // Set the instance and make it persistent
@@ -72,14 +93,13 @@ public class GameManager : MonoBehaviour
         numLevels = levels != null ? levels.Length : 0;
     }
 
-    private void OnDestroy()
-    {
-        // unsubscribe to avoid memory leaks / dangling handlers
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (scene.name == "Menu")
+        {
+            RebindMenuPanels();
+            multiplayerPanel.SetActive(false);
+        }
         // only initialize level when we just loaded the selected level
         if (currentLevel != -1 && levels != null && currentLevel >= 0 && currentLevel < levels.Length)
         {
@@ -89,7 +109,13 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(DelayedSetupAfterLoad(scene.name));
             }
         }
-        // optional: handle Menu load cleanup if needed
+    }
+
+    private void RebindMenuPanels()
+    {
+        // Try find by name 
+        multiplayerPanel = GameObject.Find("MultiplayerPanel");
+        mainMenuPanel = GameObject.Find("MainMenuPanel");
     }
 
     private System.Collections.IEnumerator DelayedSetupAfterLoad(string sceneName)
@@ -277,12 +303,6 @@ public class GameManager : MonoBehaviour
         Debug.Log($"SetupLevel: initialized players={players.Count} enemies={enemies.Count}");
     }
 
-    // keep original overload so other code calling SetupLevel() still works if present
-    void SetupLevel()
-    {
-        SetupLevel(GameObject.FindGameObjectsWithTag("Enemy"), GameObject.FindGameObjectsWithTag("Player"));
-    }
-
     public void OnSinglePlayerLevelSelected()
     {
         Debug.Log("Single Player Level Selected");
@@ -295,5 +315,30 @@ public class GameManager : MonoBehaviour
         // pick first level (clamped in case levels changed)
         currentLevel = Mathf.Clamp(0, 0, levels.Length - 1);
     }
+
+    public void OnMultiplayerLevelSelected()
+    {
+        if (multiplayerPanel == null || mainMenuPanel == null)
+        {
+            RebindMenuPanels();
+        }
+        multiplayerPanel.SetActive(true);
+        mainMenuPanel.SetActive(false);
+    }
+
+    public void OnMultiplayerStartGame()
+    {
+        Debug.Log("Multiplayer Start Game Selected");
+        if (levels == null || levels.Length == 0)
+        {
+            Debug.LogError("GameManager: No levels configured. Add level scenes in the GameManager inspector and in Build Settings.");
+            return;
+        }
+
+        // pick first level (clamped in case levels changed)
+        currentLevel = Mathf.Clamp(0, 0, levels.Length - 1);
+    }
+
+
 
 }

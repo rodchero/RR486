@@ -15,6 +15,18 @@ public class UIEventProxy : MonoBehaviour
         }
     }
 
+    public void StartMultiplayer()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnMultiplayerLevelSelected();
+        }
+        else
+        {
+            Debug.LogWarning("UIEventProxy: GameManager.Instance is null when calling StartMultiplayer.");
+        }
+    }
+
     // Add more proxy methods as needed:
     //public void StartMultiplayer() { /* GameManager.Instance?.OnMultiplayer(); */ }
     //public void OpenSettings()    { /* ... */ }
