@@ -25,9 +25,9 @@ public class GameManager : NetworkIdentity
     private enum gameState { MainMenu, InLevel, BetweenLevels };
     private gameState currentGameState;
     [Header("Level Settings")]
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
     [SerializeField] private SceneAsset[] levelScenes; // For editor reference
-    #endif
+#endif
     private string[] levels; // For runtime use
     private int numLevels;
     private int currentLevel = -1; // -1 means no level selected
@@ -80,14 +80,14 @@ public class GameManager : NetworkIdentity
         SceneManager.sceneLoaded += OnSceneLoaded;
 
         // Convert SceneAsset references to scene names
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         levels = new string[levelScenes.Length];
         for (int i = 0; i < levelScenes.Length; i++)
         {
             if (levelScenes[i] != null)
                 levels[i] = levelScenes[i].name;
         }
-        #endif
+#endif
 
         // ensure numLevels is known as early as possible
         numLevels = levels != null ? levels.Length : 0;
@@ -99,6 +99,7 @@ public class GameManager : NetworkIdentity
         {
             RebindMenuPanels();
             multiplayerPanel.SetActive(false);
+            isSinglePlayer = true; // reset to singleplayer on menu load (set when multiplayer selected)
         }
         // only initialize level when we just loaded the selected level
         if (currentLevel != -1 && levels != null && currentLevel >= 0 && currentLevel < levels.Length)
@@ -176,7 +177,7 @@ public class GameManager : NetworkIdentity
                     // guard against invalid level index / empty levels array
                     if (levels == null || currentLevel < 0 || currentLevel >= levels.Length)
                     {
-                        Debug.LogError($"GameManager: Invalid level index {currentLevel}. levels length={(levels==null?0:levels.Length)}. Clear selection or configure levels in inspector.");
+                        Debug.LogError($"GameManager: Invalid level index {currentLevel}. levels length={(levels == null ? 0 : levels.Length)}. Clear selection or configure levels in inspector.");
                         currentLevel = -1;
                         break;
                     }
@@ -184,7 +185,14 @@ public class GameManager : NetworkIdentity
                     Debug.Log("Loading Level " + currentLevel);
                     isLoadingLevel = true;
                     // load scene and wait for OnSceneLoaded to call SetupLevel
-                    SceneManager.LoadScene(levels[currentLevel]);
+                    if (isSinglePlayer)
+                    {
+                        SceneManager.LoadScene(levels[currentLevel]);
+                    }
+                    else
+                    {
+                        LoadNetworkedLevel(levels[currentLevel]);
+                    }
                 }
                 break;
             case gameState.InLevel:
@@ -213,7 +221,14 @@ public class GameManager : NetworkIdentity
                             isLoadingLevel = false;
 
                             currentGameState = gameState.MainMenu;
-                            SceneManager.LoadScene("Menu");
+                            if (isSinglePlayer)
+                            {
+                                SceneManager.LoadScene("Menu");
+                            }
+                            else
+                            {
+                                LoadNetworkedLevel("Menu");
+                            }
                         }
                         else
                         {
@@ -225,7 +240,14 @@ public class GameManager : NetworkIdentity
 
                             isLoadingLevel = true;
                             currentGameState = gameState.MainMenu; // stay in menu-loading state until sceneLoaded handles setup
-                            SceneManager.LoadScene(levels[currentLevel]);
+                            if (isSinglePlayer)
+                            {
+                                SceneManager.LoadScene(levels[currentLevel]);
+                            }
+                            else
+                            {
+                                LoadNetworkedLevel(levels[currentLevel]);
+                            }
                             // OnSceneLoaded/DelayedSetupAfterLoad will set currentGameState = InLevel
                         }
                     }
@@ -240,7 +262,14 @@ public class GameManager : NetworkIdentity
                         isLoadingLevel = false;
 
                         currentGameState = gameState.MainMenu;
-                        SceneManager.LoadScene("Menu");
+                        if (isSinglePlayer)
+                        {
+                            SceneManager.LoadScene("Menu");
+                        }
+                        else
+                        {
+                            LoadNetworkedLevel("Menu");
+                        }
                     }
                 }
                 break;
@@ -324,6 +353,7 @@ public class GameManager : NetworkIdentity
         }
         multiplayerPanel.SetActive(true);
         mainMenuPanel.SetActive(false);
+        isSinglePlayer = false;
     }
 
     public void OnMultiplayerStartGame()
@@ -339,6 +369,13 @@ public class GameManager : NetworkIdentity
         currentLevel = Mathf.Clamp(0, 0, levels.Length - 1);
     }
 
+    private void LoadNetworkedLevel(string levelName)
+    {
+        // Use PurrNet NetworkManager to load level for all clients
+        Debug.Log("Loading networked level: " + levelName);
+        var nm = FindFirstObjectByType<NetworkManager>();
+        nm.sceneModule.LoadSceneAsync(levelName);
+    }
 
 
 }
