@@ -4,6 +4,14 @@ using UnityEngine.SceneManagement;
 using System.Runtime.InteropServices;
 using PurrNet;
 using System;
+using System.Runtime.ExceptionServices;
+using PurrNet.Modules;
+using System.Runtime.CompilerServices;
+using UnityEngine.AI;
+
+
+
+
 
 
 #if UNITY_EDITOR
@@ -13,13 +21,13 @@ using UnityEditor;
 public class GameManager : NetworkIdentity
 {
     // internal variables for level state (when in a level)
-    private levelState currentLevelState;
-    private List<GameObject> enemies;
-    private List<GameObject> players;
+    private SyncVar<levelState> currentLevelState = new(levelState.Ongoing);
+    private SyncArray<GameObject> enemies;
+    private SyncArray<GameObject> players;
     private enum levelState { Ongoing, Win, Lose };
 
     private bool isSinglePlayer = true;
-    // used to (not) spawn in 2nd player tank in singleplayer mode
+    // used to (not) spawn in 2nd player tank in singleplayer mode & scene syncronization 
 
     // variables for level management
     private enum gameState { MainMenu, InLevel, BetweenLevels };
@@ -45,13 +53,12 @@ public class GameManager : NetworkIdentity
 
     private bool isLoadingLevel = false;
 
-    [Header("Multiplayer")]
-    // simple connected players store (id,name)
-    private List<(string id, string name)> connectedPlayers = new List<(string id, string name)>();
-
     // Scene object references
     public GameObject multiplayerPanel;
     public GameObject mainMenuPanel;
+    [Header("Player Spawning")]
+    [SerializeField] public GameObject playerTankSpawnPoint;
+    [SerializeField] public GameObject playerTankPrefab;
 
     // Singleton instance - this script should only have one instance and always persists between scenes (to manage game state)
     public static GameManager Instance { get; private set; }
@@ -216,7 +223,7 @@ public class GameManager : NetworkIdentity
 
                             // reset level selection and state, then load Menu
                             currentLevel = -1;
-                            currentLevelState = levelState.Ongoing;
+                            currentLevelState.value = levelState.Ongoing;
                             previousLevelResult = levelResult.None;
                             isLoadingLevel = false;
 
@@ -258,7 +265,7 @@ public class GameManager : NetworkIdentity
 
                         currentLevel = -1;
                         previousLevelResult = levelResult.None;
-                        currentLevelState = levelState.Ongoing;
+                        currentLevelState.value = levelState.Ongoing;
                         isLoadingLevel = false;
 
                         currentGameState = gameState.MainMenu;
@@ -276,9 +283,10 @@ public class GameManager : NetworkIdentity
         }
     }
 
+    [ServerRpc]
     void PlayLevel()
     {
-        switch (currentLevelState)
+        switch (currentLevelState.value)
         {
             case levelState.Ongoing:
                 // defensive: if lists haven't been initialized yet, don't decide win/lose
@@ -288,18 +296,31 @@ public class GameManager : NetworkIdentity
                     return;
                 }
 
-                enemies.RemoveAll(item => item == null);
-                players.RemoveAll(item => item == null);
+                // clean up any destroyed objects from enemy and player lists
+                for (int i = enemies.Count - 1; i >= 0; i--)
+                {
+                    if (enemies[i] == null)
+                    {
+                        enemies.RemoveAt(i);
+                    }
+                }
+                for (int i = players.Count - 1; i >= 0; i--)
+                {
+                    if (players[i] == null)
+                    {
+                        players.RemoveAt(i);
+                    }
+                }
 
                 Debug.Log($"PlayLevel: players={players.Count} enemies={enemies.Count}");
 
                 if (enemies.Count == 0)
                 {
-                    currentLevelState = levelState.Win;
+                    currentLevelState.value = levelState.Win;
                 }
                 else if (players.Count == 0)
                 {
-                    currentLevelState = levelState.Lose;
+                    currentLevelState.value = levelState.Lose;
                 }
                 break;
             case levelState.Win:
@@ -317,20 +338,72 @@ public class GameManager : NetworkIdentity
         }
     }
 
-    // updated SetupLevel signature to accept pre-found arrays (keeps one Find step)
     void SetupLevel(GameObject[] foundEnemies, GameObject[] foundPlayers)
     {
-        currentLevelState = levelState.Ongoing;
+        currentLevelState.value = levelState.Ongoing;
+        GameObject playerTankSpawnPoint = GameObject.Find("PlayerTankSpawnPoint");
 
-        enemies = new List<GameObject>(foundEnemies ?? new GameObject[0]);
-        players = new List<GameObject>(foundPlayers ?? new GameObject[0]);
+        Vector3 spawnOffset = playerTankSpawnPoint.transform.position + new Vector3(-3f, 0, 0); // 1st player spawns 3 units to the left
+        // call server-side spawn method
+        SpawnAndOwnTank_Server(spawnOffset);
+
+        // setup 2nd playertank for player2 in multiplayer
+        if (!isSinglePlayer)
+        {
+            Debug.Log("Spawning 2nd player tank for multiplayer.");
+            spawnOffset = playerTankSpawnPoint.transform.position + new Vector3(3f, 0, 0); // 2nd player spawns 3 units to the right
+            SpawnAndOwnTank_Server(spawnOffset);
+        }
+
+        // create and populate SyncArrays for enemies and players
+        enemies = new SyncArray<GameObject>();
+        for (int i = 0; i < foundEnemies.Length; i++)
+        {
+            enemies.Add(foundEnemies[i]);
+        }
+        players = new SyncArray<GameObject>();
+        for (int i = 0; i < foundPlayers.Length; i++)
+        {
+            players.Add(foundPlayers[i]);
+        }
 
         // defensive cleanup
-        enemies.RemoveAll(item => item == null);
-        players.RemoveAll(item => item == null);
+        for (int i = enemies.Count - 1; i >= 0; i--)
+        {
+            if (enemies[i] == null)
+            {
+                enemies.RemoveAt(i);
+            }
+        }
+        for (int i = players.Count - 1; i >= 0; i--)
+        {
+            if (players[i] == null)
+            {
+                players.RemoveAt(i);
+            }
+        }
 
         Debug.Log($"SetupLevel: initialized players={players.Count} enemies={enemies.Count}");
     }
+
+    // Replace your ObserversRpc method with a server-side spawn implementation
+    [ServerRpc]
+    private void SpawnAndOwnTank_Server(Vector3 offset)
+    {
+        var nm = FindFirstObjectByType<NetworkManager>();
+
+        // instantiate on the server
+        GameObject playerTank = Instantiate(playerTankPrefab, offset, Quaternion.identity);
+        
+        nm.Spawn(playerTank); 
+
+        // Assign ownership: you must supply the correct connection / player reference from server context.
+        // Example placeholder - replace 'targetConnection' with the actual server connection/player object:
+        // playerTank.GetComponent<NetworkIdentity>().GiveOwnership(targetConnection);
+        PlayerID targetConnection = help
+        playerTank.GetComponent<NetworkIdentity>().GiveOwnership(targetConnection);
+    }
+
 
     public void OnSinglePlayerLevelSelected()
     {

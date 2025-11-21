@@ -1474,6 +1474,7 @@ MonoBehaviour:
   losePopupCanvas: {fileID: 2390417632038381146, guid: 319812e7fa8f7711c9c34d3b8622695c, type: 3}
   multiplayerPanel: {fileID: 720179416}
   mainMenuPanel: {fileID: 1946901972}
+  playerTankPrefab: {fileID: 8948482066573538588, guid: 56d07a063ed0d27e980fb2d41fcdd27d, type: 3}
 --- !u!4 &1340501885
 Transform:
   m_ObjectHideFlags: 0

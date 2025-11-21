@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using PurrNet;
+using NUnit.Framework;
 
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent (typeof(Rigidbody))]
-public class TankController : MonoBehaviour
+public class TankController : NetworkIdentity
 {
     // Unity Objects (need to be assigned in inspector)
     [Header("Unity Parameters")]
@@ -42,8 +44,19 @@ public class TankController : MonoBehaviour
         currentShells = new List<GameObject>();
         projectileLayer = LayerMask.GetMask("Projectile");
         groundLayer = LayerMask.GetMask("Ground");
-        playerCamera = Camera.main;
-}
+        playerCamera = GetComponentInChildren<Camera>();
+    }
+
+    protected override void OnSpawned()
+    {
+        base.OnSpawned();
+    }
+
+    void Update()
+    {
+        // prevent camera from rotating with tank (since it's a child object)
+        playerCamera.transform.rotation = Quaternion.Euler(88, 0, 0);
+    }
 
     // FixedUpdate is called once per fixed time period 
     void FixedUpdate()
@@ -86,15 +99,6 @@ public class TankController : MonoBehaviour
             float newY = Mathf.MoveTowardsAngle(currentEuler.y, targetEuler.y, tankTurretRotationSpeed * Time.fixedDeltaTime);
             tankTurret.transform.rotation = Quaternion.Euler(0, newY, 0);
         }
-    }
-
-
-
-    void LateUpdate()
-    {
-        // camera follows tank from above
-        Vector3 cameraOffset = new Vector3(0.0f, 40.0f, 0.0f);
-        playerCamera.transform.position = transform.position + cameraOffset;
     }
 
     // updated input system event functions
