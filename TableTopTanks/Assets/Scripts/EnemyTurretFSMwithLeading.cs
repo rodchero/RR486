@@ -37,6 +37,7 @@ public class EnemyTurretFSMwithLeading : MonoBehaviour
     bool hasLOS = false;
     private LayerMask projectileLayer;
     private Rigidbody playerRb;
+    private float playerCheckTimeout = 0f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -44,7 +45,7 @@ public class EnemyTurretFSMwithLeading : MonoBehaviour
         canShoot = false;
         currentState = State.Idle;
         timer = 0.0f;
-        playerTank = GameObject.FindGameObjectWithTag("Player");
+        playerTank = FindNearestPlayer();
         currentShells = new List<GameObject>();
         projectileLayer = LayerMask.GetMask("Projectile");
         playerTank = GameObject.FindGameObjectWithTag("Player");
@@ -54,6 +55,12 @@ public class EnemyTurretFSMwithLeading : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        playerCheckTimeout += Time.deltaTime;
+        if (playerCheckTimeout >= 2.0f)
+        {
+            playerTank = FindNearestPlayer();
+            playerCheckTimeout = 0;
+        }
         // get distance to player tank
         // if multiplayer, this will only consider the closest player tank
         distanceToPlayer = playerTank != null ? Vector3.Distance(transform.position, playerTank.transform.position) : Mathf.Infinity;
@@ -101,6 +108,7 @@ public class EnemyTurretFSMwithLeading : MonoBehaviour
 
     private void Active()
     {
+        playerTank = FindNearestPlayer();
         if (playerTank == null)
         {
             currentState = State.Idle;
@@ -239,7 +247,7 @@ public class EnemyTurretFSMwithLeading : MonoBehaviour
     /// Compute time to intercept a moving target from shooterPos with projectileSpeed.
     /// Solves ||(targetPos + v*t - shooterPos)|| = projectileSpeed * t for the smallest positive t.
     /// Falls back to distance/projectileSpeed when no valid positive root exists.
- 
+
     private float ComputeInterceptTime(Vector3 shooterPos, Vector3 targetPos, Vector3 targetVel, float projSpeed)
     {
         if (projSpeed <= 0.0f)
@@ -283,6 +291,25 @@ public class EnemyTurretFSMwithLeading : MonoBehaviour
         }
 
         return Mathf.Min(t, maxLeadTime);
+    }
+    
+    private GameObject FindNearestPlayer()
+    {
+        GameObject[] playerList = GameObject.FindGameObjectsWithTag("Player");
+        Vector3 thisPos = transform.position;
+        float closest = float.PositiveInfinity;
+        GameObject closestPlayer = null;
+
+        for (int i = 0; i < playerList.Length; i++)
+        {
+            float distance = Vector3.Distance(thisPos, playerList[i].transform.position);
+            if (distance < closest)
+            {
+                closest = distance;
+                closestPlayer = playerList[i];
+            }
+        }
+        return closestPlayer;
     }
 
 }

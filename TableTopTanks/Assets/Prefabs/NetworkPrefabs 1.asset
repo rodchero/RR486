@@ -13,12 +13,40 @@ MonoBehaviour:
   m_Name: NetworkPrefabs 1
   m_EditorClassIdentifier: PurrNet.Runtime::PurrNet.NetworkPrefabs
   autoGenerate: 1
-  networkOnly: 1
+  networkOnly: 0
   poolByDefault: 0
   folder: {fileID: 102900000, guid: 1e1b521febd0fd767937a439d614cdec, type: 3}
   linkedNetworkPrefabs: []
   prefabs:
   - guid: 56d07a063ed0d27e980fb2d41fcdd27d
     prefab: {fileID: 8948482066573538588, guid: 56d07a063ed0d27e980fb2d41fcdd27d, type: 3}
+    pooled: 0
+    warmupCount: 5
+  - guid: 05f75fd4c72ced670a930f5bdccb4a1b
+    prefab: {fileID: 1000011797152326, guid: 05f75fd4c72ced670a930f5bdccb4a1b, type: 3}
+    pooled: 0
+    warmupCount: 5
+  - guid: 108b64faf07989f8d8ae1c61765c9db6
+    prefab: {fileID: 4997480858885771019, guid: 108b64faf07989f8d8ae1c61765c9db6, type: 3}
+    pooled: 0
+    warmupCount: 5
+  - guid: 319812e7fa8f7711c9c34d3b8622695c
+    prefab: {fileID: 2390417632038381146, guid: 319812e7fa8f7711c9c34d3b8622695c, type: 3}
+    pooled: 0
+    warmupCount: 5
+  - guid: 5186a3696982a24b4b5192afa528ec5f
+    prefab: {fileID: 8666097026217984045, guid: 5186a3696982a24b4b5192afa528ec5f, type: 3}
+    pooled: 0
+    warmupCount: 5
+  - guid: 7f4c202ca4c5c8f4693850d64de99b38
+    prefab: {fileID: 6463975326587695869, guid: 7f4c202ca4c5c8f4693850d64de99b38, type: 3}
+    pooled: 0
+    warmupCount: 5
+  - guid: b821b5eee7f186ef7954a97623c7184c
+    prefab: {fileID: 1000013462590818, guid: b821b5eee7f186ef7954a97623c7184c, type: 3}
+    pooled: 0
+    warmupCount: 5
+  - guid: cd2f2c53bcb66e62289cc4d0f85ea066
+    prefab: {fileID: 1987755079612583530, guid: cd2f2c53bcb66e62289cc4d0f85ea066, type: 3}
     pooled: 0
     warmupCount: 5

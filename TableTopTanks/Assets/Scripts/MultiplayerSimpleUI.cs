@@ -19,16 +19,16 @@ public class MultiplayerSimpleUI : MonoBehaviour
     // internal state
     bool player2Connected = false;
     bool connectedToServer = false; // for client: whether connected to host
-    bool isHost = false; 
+    private NetworkManager nm;
 
     void Awake()
     {
         if (startButton != null) startButton.onClick.AddListener(HandleStartPressed);
         if (backButton != null) backButton.onClick.AddListener(HandleBackPressed);
 
-        isHost = FindFirstObjectByType<NetworkManager>().isServer;
+        nm = FindFirstObjectByType<NetworkManager>();
 
-        if (isHost)
+        if (nm.isHost)
         {
             Debug.Log("MultiplayerSimpleUI: operating as HOST");
         }
@@ -42,7 +42,7 @@ public class MultiplayerSimpleUI : MonoBehaviour
     void Update()
     {
         // if host, check if 2nd player connected
-        if (isHost)
+        if (nm.isHost)
         {
             player2Connected = FindFirstObjectByType<NetworkManager>().playerCount == 2;
         }
@@ -63,7 +63,7 @@ public class MultiplayerSimpleUI : MonoBehaviour
     
     void HandleStartPressed()
     {
-            FindFirstObjectByType<GameManager>().OnMultiplayerStartGame();
+            FindFirstObjectByType<Manager>().OnMultiplayerStartGame();
     }
 
     // internal UI refresh logic -------------------------------------------------
@@ -71,7 +71,7 @@ public class MultiplayerSimpleUI : MonoBehaviour
     {
         if (statusText != null)
         {
-            if (isHost)
+            if (nm.isHost)
             {
                 statusText.text = player2Connected ? "Player 2 connected" : "Waiting for player 2";
             }
@@ -83,6 +83,6 @@ public class MultiplayerSimpleUI : MonoBehaviour
 
         // Start button: only enabled when player2 is connected AND this client is host
         if (startButton != null)
-            startButton.interactable = (isHost && player2Connected);
+            startButton.interactable = (nm.isHost && player2Connected);
     }
 }

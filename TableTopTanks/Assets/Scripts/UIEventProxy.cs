@@ -3,11 +3,11 @@ using UnityEngine;
 public class UIEventProxy : MonoBehaviour
 {
     // Parameterless public method so Unity Button can call it from the Inspector.
-    public void StartSinglePlayer()
+    public void UIProxyStartSinglePlayer()
     {
-        if (GameManager.Instance != null)
+        if (Manager.Instance != null)
         {
-            GameManager.Instance.OnSinglePlayerLevelSelected();
+            Manager.Instance.OnSinglePlayerButtonPress();
         }
         else
         {
@@ -15,19 +15,15 @@ public class UIEventProxy : MonoBehaviour
         }
     }
 
-    public void StartMultiplayer()
+    public void UIProxyStartMultiplayer()
     {
-        if (GameManager.Instance != null)
+        if (Manager.Instance != null)
         {
-            GameManager.Instance.OnMultiplayerLevelSelected();
+            Manager.Instance.OnMultiplayerButtonPress();
         }
         else
         {
             Debug.LogWarning("UIEventProxy: GameManager.Instance is null when calling StartMultiplayer.");
         }
     }
-
-    // Add more proxy methods as needed:
-    //public void StartMultiplayer() { /* GameManager.Instance?.OnMultiplayer(); */ }
-    //public void OpenSettings()    { /* ... */ }
 }

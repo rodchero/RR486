@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -23,6 +24,7 @@ public class EnemyMovementFSM : MonoBehaviour
     // no need for destroyed state; turret behaviour script handles enemy destruction
     private enum State { Idle, Flank, Chase }
     private State currentState;
+    private float playerCheckTimeout = 0f;
 
     // flank runtime state
     private Vector3 flankTarget;
@@ -32,7 +34,7 @@ public class EnemyMovementFSM : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        playerTank = GameObject.FindGameObjectWithTag("Player");
+        playerTank = FindNearestPlayer();
         rb = GetComponent<Rigidbody>();
         currentState = State.Idle;
 
@@ -61,6 +63,12 @@ public class EnemyMovementFSM : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        playerCheckTimeout += Time.deltaTime;
+        if (playerCheckTimeout >= 2.0f)
+        {
+            playerTank = FindNearestPlayer();
+            playerCheckTimeout = 0;
+        }
         switch (currentState)
         {
             case State.Idle:
@@ -204,5 +212,25 @@ public class EnemyMovementFSM : MonoBehaviour
             currentState = State.Chase;
             return;
         }
+    }
+
+    private GameObject FindNearestPlayer()
+    {
+        GameObject[] playerList = GameObject.FindGameObjectsWithTag("Player");
+        Vector3 thisPos = transform.position;
+        float closest = float.PositiveInfinity;
+        GameObject closestPlayer = null;
+
+        for (int i = 0; i < playerList.Length; i++)
+        {
+            float distance = Vector3.Distance(thisPos, playerList[i].transform.position);
+            if (distance < closest)
+            {
+                closest = distance;
+                closestPlayer = playerList[i];
+            }
+        }
+        if (closestPlayer != null) Debug.Log("Movement: Found player to target");
+        return closestPlayer;
     }
 }

@@ -35,6 +35,7 @@ public class TankController : NetworkIdentity
     List<GameObject> currentShells;
     private LayerMask projectileLayer;
     private LayerMask groundLayer;
+    private PlayerInput _pinput;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -44,23 +45,49 @@ public class TankController : NetworkIdentity
         currentShells = new List<GameObject>();
         projectileLayer = LayerMask.GetMask("Projectile");
         groundLayer = LayerMask.GetMask("Ground");
-        playerCamera = GetComponentInChildren<Camera>();
+
+        // cache camera once from children
+        playerCamera = GetComponentInChildren<Camera>(true);
+
+        // ensure we have PlayerInput
+        if (!_pinput)
+            TryGetComponent(out _pinput);
+
+        if (!isController)
+        {
+            if (playerCamera != null) playerCamera.gameObject.SetActive(false);
+            if (_pinput != null) _pinput.enabled = false;
+        }
+        else
+        {
+            if (playerCamera != null) playerCamera.gameObject.SetActive(true);
+            if (_pinput != null) _pinput.enabled = true;
+        }
     }
 
-    protected override void OnSpawned()
+    private void Awake()
     {
-        base.OnSpawned();
+        if (!TryGetComponent(out _pinput))
+            Debug.LogError("Couldn't get the Player Input Component", this);
     }
+
 
     void Update()
     {
-        // prevent camera from rotating with tank (since it's a child object)
-        playerCamera.transform.rotation = Quaternion.Euler(88, 0, 0);
+        if (!isController) return;
+
+        // Only update camera rotation for the local player's camera
+        if (playerCamera != null && playerCamera.gameObject.activeSelf)
+        {
+            // prevent camera from rotating with tank (since it's a child object)
+            playerCamera.transform.rotation = Quaternion.Euler(88, 0, 0);
+        }
     }
 
     // FixedUpdate is called once per fixed time period 
     void FixedUpdate()
     {
+        if (!isController) return;
         // move tank forward/backward
 
         Vector3 moveDirection = transform.forward * moveVal.y * tankMoveSpeed * Time.fixedDeltaTime;

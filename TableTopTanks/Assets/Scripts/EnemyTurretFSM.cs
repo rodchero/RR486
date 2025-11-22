@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using PurrNet;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +29,7 @@ public class EnemyTurretFSM : MonoBehaviour
     List<GameObject> currentShells;
     bool hasLOS = false;
     private LayerMask projectileLayer;
+    private float playerCheckTimeout = 0f;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -36,7 +38,7 @@ public class EnemyTurretFSM : MonoBehaviour
         canShoot = false;
         currentState = State.Idle;
         timer = 0.0f;
-        playerTank = GameObject.FindGameObjectWithTag("Player");
+        playerTank = FindNearestPlayer();
         currentShells = new List<GameObject>();
         projectileLayer = LayerMask.GetMask("Projectile");
     }
@@ -44,6 +46,13 @@ public class EnemyTurretFSM : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        playerCheckTimeout += Time.deltaTime;
+        if (playerCheckTimeout >= 2.0f)
+        {
+            playerTank = FindNearestPlayer();
+            playerCheckTimeout = 0;
+        }
         // get distance to player tank
         // if multiplayer, this will only consider the closest player tank
         distanceToPlayer = playerTank != null ? Vector3.Distance(transform.position, playerTank.transform.position) : Mathf.Infinity;
@@ -86,6 +95,7 @@ public class EnemyTurretFSM : MonoBehaviour
 
     private void Active()
     {
+        playerTank = FindNearestPlayer();
         if (playerTank == null)
         {
             currentState = State.Idle;
@@ -180,6 +190,25 @@ public class EnemyTurretFSM : MonoBehaviour
             // keep track of current shells
             currentShells.Add(projectile);
         }
+    }
+    
+    private GameObject FindNearestPlayer()
+    {
+        GameObject[] playerList = GameObject.FindGameObjectsWithTag("Player");
+        Vector3 thisPos = transform.position;
+        float closest = float.PositiveInfinity;
+        GameObject closestPlayer = null;
+
+        for (int i = 0; i < playerList.Length; i++)
+        {
+            float distance = Vector3.Distance(thisPos, playerList[i].transform.position);
+            if (distance < closest)
+            {
+                closest = distance;
+                closestPlayer = playerList[i];
+            }
+        }
+        return closestPlayer;
     }
 
 }

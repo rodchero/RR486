@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1715560710711529551}
   - component: {fileID: 878522411452524522}
-  - component: {fileID: 7340295459666281096}
   m_Layer: 3
   m_Name: PlayerCam
   m_TagString: Untagged
@@ -84,14 +83,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &7340295459666281096
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 54498302620417459}
-  m_Enabled: 1
 --- !u!1 &5402273293951964861
 GameObject:
   m_ObjectHideFlags: 0
@@ -316,6 +307,8 @@ GameObject:
   - component: {fileID: 8870775535421455124}
   - component: {fileID: 9089007445473814698}
   - component: {fileID: 1583266933192650899}
+  - component: {fileID: -1384152572486863702}
+  - component: {fileID: 7260116265956514804}
   m_Layer: 3
   m_Name: PlayerTank
   m_TagString: Player
@@ -410,12 +403,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 336ee8011d3de754dba09404793d90ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TankController
+  _networkRules: {fileID: 0}
+  _visitiblityRules: {fileID: 0}
+  _isSetup: 0
+  _prefabId: -2147483648
+  _componentIndex: -2147483648
+  _shouldBePooled: 0
+  _parent: {fileID: 0}
+  _invertedPathToNearestParent: 
+  _directChildren: []
   playerCamera: {fileID: 878522411452524522}
   tankTurret: {fileID: 5402273293951964861}
   shellSpawner: {fileID: 9138806739606818259}
   mineSpawner: {fileID: 7572788027356473603}
   shellObject: {fileID: 6463975326587695869, guid: 7f4c202ca4c5c8f4693850d64de99b38, type: 3}
-  explosionVFX: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1, type: 3}
+  explosionVFX: {fileID: 1000013462590818, guid: b821b5eee7f186ef7954a97623c7184c, type: 3}
   maxShells: 5
   shellSpeed: 5
   tankMoveSpeed: 16
@@ -442,6 +444,70 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.65, y: 3.384349, z: 4.25}
   m_Center: {x: 0, y: 1.8078254, z: 0.16000009}
+--- !u!114 &-1384152572486863702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8948482066573538588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 817fe5016bd0a2a49a95b6eb338bb132, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: PurrNet.Runtime::PurrNet.NetworkTransform
+  _networkRules: {fileID: 0}
+  _visitiblityRules: {fileID: 0}
+  _isSetup: 0
+  _prefabId: -2147483648
+  _componentIndex: -2147483648
+  _shouldBePooled: 0
+  _parent: {fileID: 0}
+  _invertedPathToNearestParent: 
+  _directChildren: []
+  _syncPosition: 1
+  _syncRotation: 1
+  _syncScale: 1
+  _syncParent: 1
+  _interpolateSettings: 7
+  _minBufferSize: 1
+  _maxBufferSize: 2
+  _characterControllerPatch: 1
+  _ownerAuth: 1
+  _interpolationTiming: 0
+--- !u!114 &7260116265956514804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8948482066573538588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39d5e4b97b1615f4aae984a3d5f4235f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: PurrNet.Runtime::PurrNet.NetworkOwnershipToggle
+  _networkRules: {fileID: 0}
+  _visitiblityRules: {fileID: 0}
+  _isSetup: 0
+  _prefabId: -2147483648
+  _componentIndex: -2147483648
+  _shouldBePooled: 0
+  _parent: {fileID: 0}
+  _invertedPathToNearestParent: 
+  _directChildren: []
+  _components:
+  - target: {fileID: 9089007445473814698}
+    activeAsOwner: 1
+  - target: {fileID: 7588867616168276864}
+    activeAsOwner: 1
+  _gameObjects:
+  - target: {fileID: 54498302620417459}
+    activeAsOwner: 1
+  _toActivate: []
+  _toDeactivate: []
+  _toEnable: []
+  _toDisable: []
 --- !u!1 &9138806739606818259
 GameObject:
   m_ObjectHideFlags: 0

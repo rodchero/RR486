@@ -224,6 +224,7 @@ GameObject:
   - component: {fileID: 2688721631880160254}
   - component: {fileID: 5736658244614223753}
   - component: {fileID: 2552492048359538110}
+  - component: {fileID: 3712520505485013303}
   m_Layer: 8
   m_Name: EnemyBasic
   m_TagString: Enemy
@@ -354,7 +355,7 @@ MonoBehaviour:
   playerTank: {fileID: 0}
   projectilePrefab: {fileID: 6463975326587695869, guid: 7f4c202ca4c5c8f4693850d64de99b38, type: 3}
   projectileSpawner: {fileID: 5553229448614890882}
-  explosionVFX: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1, type: 3}
+  explosionVFX: {fileID: 1000013462590818, guid: b821b5eee7f186ef7954a97623c7184c, type: 3}
   projectileSpeed: 5
   activationDistance: 50
   rotateSpeed: 60
@@ -364,3 +365,34 @@ MonoBehaviour:
   fallbackLeadTime: 0.5
   aimAngleThreshold: 8
   leadSphereRadius: 0.8
+--- !u!114 &3712520505485013303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8666097026217984045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 817fe5016bd0a2a49a95b6eb338bb132, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: PurrNet.Runtime::PurrNet.NetworkTransform
+  _networkRules: {fileID: 0}
+  _visitiblityRules: {fileID: 0}
+  _isSetup: 0
+  _prefabId: -2147483648
+  _componentIndex: -2147483648
+  _shouldBePooled: 0
+  _parent: {fileID: 0}
+  _invertedPathToNearestParent: 
+  _directChildren: []
+  _syncPosition: 1
+  _syncRotation: 1
+  _syncScale: 1
+  _syncParent: 1
+  _interpolateSettings: 7
+  _minBufferSize: 1
+  _maxBufferSize: 2
+  _characterControllerPatch: 0
+  _ownerAuth: 1
+  _interpolationTiming: 0

@@ -101,6 +101,7 @@ GameObject:
   - component: {fileID: 7612275791686567360}
   - component: {fileID: 5619829493001271652}
   - component: {fileID: 6634584328817852300}
+  - component: {fileID: 6802495243377343691}
   m_Layer: 8
   m_Name: EnemyTurret
   m_TagString: Enemy
@@ -189,12 +190,43 @@ MonoBehaviour:
   playerTank: {fileID: 0}
   projectilePrefab: {fileID: 6463975326587695869, guid: 7f4c202ca4c5c8f4693850d64de99b38, type: 3}
   projectileSpawner: {fileID: 4748950904266626980}
-  explosionVFX: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1, type: 3}
+  explosionVFX: {fileID: 1000013462590818, guid: b821b5eee7f186ef7954a97623c7184c, type: 3}
   projectileSpeed: 5
   activationDistance: 50
   rotateSpeed: 60
   maxShells: 5
   reloadTime: 2
+--- !u!114 &6802495243377343691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1987755079612583530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 817fe5016bd0a2a49a95b6eb338bb132, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: PurrNet.Runtime::PurrNet.NetworkTransform
+  _networkRules: {fileID: 0}
+  _visitiblityRules: {fileID: 0}
+  _isSetup: 0
+  _prefabId: -2147483648
+  _componentIndex: -2147483648
+  _shouldBePooled: 0
+  _parent: {fileID: 0}
+  _invertedPathToNearestParent: 
+  _directChildren: []
+  _syncPosition: 1
+  _syncRotation: 1
+  _syncScale: 1
+  _syncParent: 1
+  _interpolateSettings: 7
+  _minBufferSize: 1
+  _maxBufferSize: 2
+  _characterControllerPatch: 0
+  _ownerAuth: 1
+  _interpolationTiming: 0
 --- !u!1 &2339845775820409649
 GameObject:
   m_ObjectHideFlags: 0

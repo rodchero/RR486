@@ -400,12 +400,12 @@ public class GameManager : NetworkIdentity
         // Assign ownership: you must supply the correct connection / player reference from server context.
         // Example placeholder - replace 'targetConnection' with the actual server connection/player object:
         // playerTank.GetComponent<NetworkIdentity>().GiveOwnership(targetConnection);
-        PlayerID targetConnection = help
-        playerTank.GetComponent<NetworkIdentity>().GiveOwnership(targetConnection);
+        //PlayerID targetConnection = help
+        //playerTank.GetComponent<NetworkIdentity>().GiveOwnership(targetConnection);
     }
 
 
-    public void OnSinglePlayerLevelSelected()
+    public void OnSinglePlayerButtonPress()
     {
         Debug.Log("Single Player Level Selected");
         if (levels == null || levels.Length == 0)
@@ -418,7 +418,7 @@ public class GameManager : NetworkIdentity
         currentLevel = Mathf.Clamp(0, 0, levels.Length - 1);
     }
 
-    public void OnMultiplayerLevelSelected()
+    public void OnMultiplayerButtonPress()
     {
         if (multiplayerPanel == null || mainMenuPanel == null)
         {
