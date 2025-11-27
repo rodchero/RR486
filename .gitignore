@@ -71,3 +71,6 @@ ExportedObj/
 # Temporary auto-generated Android Assets
 /TableTopTanks/[Aa]ssets/[Ss]treamingAssets/aa.meta
 /TableTopTanks/[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Clone Unity Project(s) from ParrelSync Plugin
+/TableTopTanks_clone*
