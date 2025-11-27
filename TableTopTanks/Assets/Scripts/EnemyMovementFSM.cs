@@ -7,7 +7,6 @@ using UnityEngine.AI;
 public class EnemyMovementFSM : MonoBehaviour
 {
     [Header("Movement Settings")]
-    [SerializeField] private GameObject playerTank;
     [SerializeField] private float activationDistance = 50f;
     [SerializeField] private float rotateSpeed = 60f;
     [SerializeField] private float moveSpeed = 10f;
@@ -25,6 +24,7 @@ public class EnemyMovementFSM : MonoBehaviour
     private enum State { Idle, Flank, Chase }
     private State currentState;
     private float playerCheckTimeout = 0f;
+    private GameObject playerTank;
 
     // flank runtime state
     private Vector3 flankTarget;

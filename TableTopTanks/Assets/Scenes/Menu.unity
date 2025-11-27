@@ -1438,6 +1438,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1340501885}
   - component: {fileID: 1340501886}
+  - component: {fileID: 1340501887}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1472,6 +1473,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5316e543a0fbdd602b3139d0d981d355, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Manager
+  playerTankPrefab: {fileID: 8948482066573538588, guid: 56d07a063ed0d27e980fb2d41fcdd27d, type: 3}
+  winPopupCanvas: {fileID: 4997480858885771019, guid: 108b64faf07989f8d8ae1c61765c9db6, type: 3}
+  losePopupCanvas: {fileID: 2390417632038381146, guid: 319812e7fa8f7711c9c34d3b8622695c, type: 3}
+  timeBetweenLevels: 2
+  numberOfLevels: 2
+--- !u!114 &1340501887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1340501883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5681fe548eb84304ea28a286062791f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: PurrNet.Runtime::PurrNet.NetworkIdentity
   _networkRules: {fileID: 0}
   _visitiblityRules: {fileID: 0}
   _isSetup: 0
@@ -1481,11 +1499,6 @@ MonoBehaviour:
   _parent: {fileID: 0}
   _invertedPathToNearestParent: 
   _directChildren: []
-  playerTankPrefab: {fileID: 8948482066573538588, guid: 56d07a063ed0d27e980fb2d41fcdd27d, type: 3}
-  winPopupCanvas: {fileID: 4997480858885771019, guid: 108b64faf07989f8d8ae1c61765c9db6, type: 3}
-  losePopupCanvas: {fileID: 2390417632038381146, guid: 319812e7fa8f7711c9c34d3b8622695c, type: 3}
-  timeBetweenLevels: 2
-  numberOfLevels: 2
 --- !u!1 &1407193152
 GameObject:
   m_ObjectHideFlags: 0

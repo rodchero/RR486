@@ -28,14 +28,14 @@ public class MultiplayerSimpleUI : MonoBehaviour
 
         nm = FindFirstObjectByType<NetworkManager>();
 
-        if (nm.isHost)
-        {
-            Debug.Log("MultiplayerSimpleUI: operating as HOST");
-        }
-        else
-        {
-            Debug.Log("MultiplayerSimpleUI: operating as CLIENT");
-        }
+        // if (nm.isHost)
+        // {
+        //     Debug.Log("MultiplayerSimpleUI: operating as HOST");
+        // }
+        // else
+        // {
+        //     Debug.Log("MultiplayerSimpleUI: operating as CLIENT");
+        // }
         RefreshUI();
     }
 

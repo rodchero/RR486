@@ -2,9 +2,7 @@ using UnityEngine;
 using PurrNet;
 using UnityEngine.SceneManagement;
 using System.Linq;
-using UnityEngine.Analytics;
-using System.Threading.Tasks;
-using UnityEngine.Windows.WebCam;
+using UnityEngine.UI;
 
 public class Manager : MonoBehaviour
 {
@@ -20,9 +18,7 @@ public class Manager : MonoBehaviour
     // General Game State 
     private enum gameState { MainMenu, InLevel, BetweenLevels };
     private gameState _gameState = gameState.MainMenu;
-    private int currentSceneIndexLocal = 0;
     private SyncVar<int> currentSceneIndex = new SyncVar<int>(0);
-    private bool isSinglePlayer = true;
 
 
     // Main Menu State
@@ -51,6 +47,7 @@ public class Manager : MonoBehaviour
 
     // Other
     private NetworkManager nm;
+    private bool wasHost = false;
 
     // End of Data Section -----------------------------------------------------
 
@@ -70,7 +67,6 @@ public class Manager : MonoBehaviour
 
         // Get references
         nm = FindFirstObjectByType<NetworkManager>();
-        currentSceneIndexLocal = 0;
         multiplayerPanel = GameObject.Find("MultiplayerPanel");
         mainMenuPanel = GameObject.Find("MainMenuPanel");
 
@@ -87,10 +83,10 @@ public class Manager : MonoBehaviour
     // Callback to finish settup up the scene after it loads
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log("Scene: " + currentSceneIndexLocal + " loaded!");
+        Debug.Log("Scene: " + scene.buildIndex + " loaded!");
 
         // Level/menu specific setup after scene load
-        if (currentSceneIndexLocal == 0)
+        if (scene.buildIndex == 0)
         {
             multiplayerPanel = GameObject.Find("MultiplayerPanel");
             mainMenuPanel = GameObject.Find("MainMenuPanel");
@@ -98,32 +94,38 @@ public class Manager : MonoBehaviour
             _levelResult = levelResult.None;
             multiplayerPanel.SetActive(false);
             mainMenuPanel.SetActive(true);
+            Button singlePlayerButton = GameObject.Find("1P").GetComponent<Button>();
+            if (!nm.isHost) singlePlayerButton.interactable = false;
         }
         else
         {
-            // call playerSpawner to spawn a character for each player
+            _gameState = gameState.InLevel;
         }
         isSceneLoaded = true;
     }
 
-   void Update()
+
+    void Update()
     {
-        // Handle multiplayer scene sync
-        if (!isSinglePlayer) currentSceneIndexLocal = currentSceneIndex.value;
+        if (!nm.isHost && !wasHost)
+        {
+            return;
+        } else
+        {
+            wasHost = true;
+        }
 
         // Do nothing until scene fully loaded
         if (!isSceneLoaded) return;
 
         // Ensure correct scene is loaded at all times
-        if (SceneManager.GetActiveScene().buildIndex != currentSceneIndexLocal)
+        if (SceneManager.GetActiveScene().buildIndex != currentSceneIndex.value)
         {
-            //if (nm.isHost && !isSinglePlayer) nm.sceneModule.LoadSceneAsync(currentSceneIndexLocal); // host-driven scene loading
-            //else SceneManager.LoadScene(currentSceneIndexLocal);
-            nm.sceneModule.LoadSceneAsync(currentSceneIndexLocal);
+            nm.sceneModule.LoadSceneAsync(currentSceneIndex.value);
             isSceneLoaded = false;
         }
 
-        // main gamestat fsm
+        // main gamestate fsm
         switch (_gameState)
         {
             case gameState.MainMenu:
@@ -136,12 +138,14 @@ public class Manager : MonoBehaviour
                 int ec = GameObject.FindGameObjectsWithTag("Enemy").Count();
                 if (ec == 0)
                 {
+                    Debug.Log("Win! (enemy count = 0)");
                     _levelResult = levelResult.Won;
                     _gameState = gameState.BetweenLevels;
                     if (winPopup == null) winPopup = Instantiate(winPopupCanvas);
                 }
                 else if (pc == 0)
                 {
+                    Debug.Log("Loss! (player count = 0)");
                     _levelResult = levelResult.Lost;
                     _gameState = gameState.BetweenLevels;
                     if (losePopup == null) losePopup = Instantiate(losePopupCanvas);
@@ -159,30 +163,28 @@ public class Manager : MonoBehaviour
                     betweenLevelsTimeElapsed = 0.0f;
 
                     // decide next scene to load based on levelResult var
+
                     switch (_levelResult)
                     {
                         case levelResult.Won:
-                            // if more levels remain, load next level on win
-                            if (currentSceneIndexLocal + 1 <= numberOfLevels)
+                            // if more levels remain, load next level on win (else menu)
+                            if (currentSceneIndex.value + 1 <= numberOfLevels)
                             {
-                                if (nm.isHost) currentSceneIndex.value++;
-                                currentSceneIndexLocal++;
+                                currentSceneIndex.value++;
                             }
                             else
                             {
-                                if (nm.isHost) currentSceneIndex.value = 0;
-                                currentSceneIndexLocal = 0;
+                                currentSceneIndex.value = 0;
                             }
                             break;
                         case levelResult.Lost:
                             // return to main menu on loss
-                            if (nm.isHost) currentSceneIndex.value = 0;
-                            currentSceneIndexLocal = 0;
+                            currentSceneIndex.value = 0;
                             break;
                     }
+
+                    // reset levelResult
                     _levelResult = levelResult.None;
-                    if (currentSceneIndexLocal != 0) _gameState = gameState.InLevel;
-                    else _gameState = gameState.MainMenu;
                 }
                 break;
         }
@@ -192,9 +194,7 @@ public class Manager : MonoBehaviour
     public void OnSinglePlayerButtonPress()
     {
         Debug.Log("Singleplayer Mode Starting");
-        currentSceneIndexLocal = 1;
         currentSceneIndex.value = 1;
-        isSinglePlayer = true;
     }
 
     // main menu multiplayer button event
@@ -209,6 +209,5 @@ public class Manager : MonoBehaviour
     {
         Debug.Log("Multiplayer Mode Starting");
         currentSceneIndex.value = 1;
-        isSinglePlayer = false;
     }
 }
