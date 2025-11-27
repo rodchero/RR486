@@ -3,20 +3,29 @@ Project for CISC486 by Roman Rodchenkov
 
 # ASSIGNMENT 4 INFORMATION 
 
+A4 Video Link:  
+https://youtu.be/GryNfTKoCCw  
+
+No build available; all gameplay is run via the editor "play" mode.  
+
 ## Very Local Multiplayer (2 unity instances on one machine)
-- 1: Create ParrelSync clone project: Top Navigation Bar ("ParrelSync") -> Clones Manager -> Create new clone
-- 2: Open instance of clone (2nd instance of game): Clones Manager -> Open In New Editor (clone 0)
-- (I reccommend "splitscreening" both editor instances to see better)
-- 3: Start host and clone, click "2 Players" button on both, click start on the host (original editor)
+- 1: Create a ParrelSync clone project: Top Navigation Bar ("ParrelSync") -> Clones Manager -> Create new clone
+- 2: Open clone (2nd instance of unity editor): Clones Manager -> Open In New Editor (clone 0) (I recommend "split-screening" both editor instances as in my video)
+- 3: Start host and clone in editor (play), click "2 Players" button on both (main menu), click start on the host (original editor)
 - 4: "Enjoy" the "seamless" multiplayer experience
 
 
 ## OR Regular Local Multiplayer (over same internal network)
-- 1: Clone a4 branch onto 2 computers. Decide which one is host.
-- 2: Setup Host: on the host computer, find out local IP address, and put that into the network host field (Menu Scene -> Network Manager (GameObject ) -> UDP Transport (Component) -> Client Settings -> Address).
-- 3: On the host computer, make sure firewall is disabled, or add a rule to prevent connection blocking (for me, i did "sudo ufw disable" for the demonstration, but this is platform-specific and may not affect you)
-- 4: Set client flags: On client computer, go to network manager component as before and set the "Start Server Flags" to "None". You should see a message "During play mode this instance will start as a CLIENT".
+- 1: Clone a4 branch onto 2 computers. Decide which one is host and which one is client (arbitrary).
+- 2: Setup Host: on the host computer, find out its local IP address, and put that into the network host field (Menu Scene -> Network Manager (GameObject) -> UDP Transport (Component) -> Client Settings -> Address (field)).
+- 3: On the host computer, make sure firewall is disabled, or add a rule to prevent connection blocking (for me, i did "sudo ufw disable" for the demonstration, but this is platform-specific and may not affect you). The server runs on port 5050 by default (see parameters in Network Manager).
+- 4: Set client flags: On client computer, go to network manager component as before and set the "Start Server Flags" to "None". You should see a message "During play mode this instance will start as a CLIENT". (Menu Scene -> Network Manager (GameObject) -> Network Manager (script) -> Start Server Flags (parameter). Uncheck all except "None"). 
 - 5: Start Host and Client games (play button in the editor) and follow steps 3&4 from "Very Local Multiplayer" Section
+
+## OR Singleplayer
+- Might be a little broken since adding network functionality 
+- Make sure editor instance is set as Host (do opposite of step 4 for Local Multiplayer)
+- Singleplayer should work as before (a3)
 
 
 ## 📌 Overview
