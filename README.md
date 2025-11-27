@@ -1,10 +1,23 @@
 # 🎮 Tabletop Tanks
 Project for CISC486 by Roman Rodchenkov
 
-# ASSIGNMENT 3 UPDATES 
-- run the game (from editor) from the main menu scene (/Assets/Scenes/Menu.unity) to make sure level loading logic works
-- pathfinding is implemented via Unity's NavMesh System 
-- link to video showing pathfinding/decision-making : https://youtu.be/fGKllEsPIVo
+# ASSIGNMENT 4 INFORMATION 
+
+## Very Local Multiplayer (2 unity instances on one machine)
+- 1: Create ParrelSync clone project: Top Navigation Bar ("ParrelSync") -> Clones Manager -> Create new clone
+- 2: Open instance of clone (2nd instance of game): Clones Manager -> Open In New Editor (clone 0)
+- (I reccommend "splitscreening" both editor instances to see better)
+- 3: Start host and clone, click "2 Players" button on both, click start on the host (original editor)
+- 4: "Enjoy" the "seamless" multiplayer experience
+
+
+## OR Regular Local Multiplayer (over same internal network)
+- 1: Clone a4 branch onto 2 computers. Decide which one is host.
+- 2: Setup Host: on the host computer, find out local IP address, and put that into the network host field (Menu Scene -> Network Manager (GameObject ) -> UDP Transport (Component) -> Client Settings -> Address).
+- 3: On the host computer, make sure firewall is disabled, or add a rule to prevent connection blocking (for me, i did "sudo ufw disable" for the demonstration, but this is platform-specific and may not affect you)
+- 4: Set client flags: On client computer, go to network manager component as before and set the "Start Server Flags" to "None". You should see a message "During play mode this instance will start as a CLIENT".
+- 5: Start Host and Client games (play button in the editor) and follow steps 3&4 from "Very Local Multiplayer" Section
+
 
 ## 📌 Overview
 Tabletop Tanks is a 3-d survival/action game in which the player controls a miniature tank, and must clear progressively harder levels that include enemies and obstacles. Inspired by the Wii Play "Tanks!" game.
@@ -18,7 +31,7 @@ Player controls the "player tank" from a top-down view, and:
 
 ## 👥 Player Setup
 - Single player as the player tank 
-- Optional co-op mode where a second player controls an allied tank and helps clear levels (unimplemented)  
+- Optional co-op mode where a second player controls an allied tank and helps clear levels  
 
 ## 🤖 AI Design [2 types implemented so far]  
 Several (4 to 8) types of enemy tanks with different behaviour, projectiles, movespeed, health, etc  
@@ -86,7 +99,7 @@ Right mouse button to place a landmine [unimplemented]
 ESC to access pause menu  
 
 ## 📂 Project Setup aligned to course topics
-Unity 6.2 (6000.2.6f2) [Updated since A1]  
+Unity 6.2 (6000.2.6f2)  
 C# scripts for PlayerController, EnemyTank_{type}, ShellProjectile, RocketProjectile, LandMine, etc  
 NavMesh for AI pathing  
 Physics materials and layers configured in Project Settings  
